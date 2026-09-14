@@ -17,9 +17,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-builder.Services.AddScoped<IFormulaProduccionRepository, FormulaProduccionRepository>();
-builder.Services.AddScoped<IFormulaProduccionService, FormulaProduccionService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IFormulaProduccionService, FormulaProduccionService>();
 
 var app = builder.Build();
 

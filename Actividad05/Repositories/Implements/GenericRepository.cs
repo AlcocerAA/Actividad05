@@ -1,4 +1,5 @@
 using Actividad05.Models;
+using Actividad05.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace Actividad05.Repositories.Implements;
