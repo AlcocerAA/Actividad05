@@ -1,9 +1,7 @@
 # Actividad 05: Scaffolding y Modelado de Base de Datos en .NET 8
 
-Repositorio grupal para el desarrollo de la Actividad 05, enfocada en el Caso 5: Empresa de Fabricación (Gestión de Producción y Control de Calidad).
+Repositorio grupal para el desarrollo de la Actividad 05:
 
-## Institución
-Tecsup - Diseño y Desarrollo de Software
 
 ## Integrantes del Grupo
 * Benjamin Sulca Huaman
