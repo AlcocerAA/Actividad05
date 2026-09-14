@@ -16,14 +16,14 @@ public class FormulaProduccionController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<FormulaProduccionResponseDto>>> ObtenerFormulas()
+    public async Task<IActionResult> ObtenerFormulas()
     {
         var formulas = await _service.GetAllFormulas();
         return Ok(formulas);
     }
 
     [HttpGet("{idProducto}/{idMateriaPrima}")]
-    public async Task<ActionResult<FormulaProduccionResponseDto>> ObtenerFormulaPorId(int idProducto, int idMateriaPrima)
+    public async Task<IActionResult> ObtenerFormulaPorId(int idProducto, int idMateriaPrima)
     {
         var formula = await _service.GetFormulaById(idProducto, idMateriaPrima);
         if (formula == null)
@@ -34,12 +34,12 @@ public class FormulaProduccionController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<FormulaProduccionResponseDto>> CrearFormula([FromBody] FormulaProduccionCreateDto dto)
+    public async Task<IActionResult> CrearFormula([FromBody] FormulaProduccionCreateDto dto)
     {
         try
         {
-            var creada = await _service.CreateFormula(dto);
-            return CreatedAtAction(nameof(ObtenerFormulaPorId), new { idProducto = creada.IdProducto, idMateriaPrima = creada.IdMateriaPrima }, creada);
+            await _service.CreateFormula(dto);
+            return Ok("Formula de produccion creada con exito");
         }
         catch (ArgumentException ex)
         {
@@ -63,7 +63,7 @@ public class FormulaProduccionController : ControllerBase
         {
             return NotFound("Formula de produccion no encontrada.");
         }
-        return NoContent();
+        return Ok("Formula de produccion actualizada correctamente");
     }
 
     [HttpPatch("{idProducto}/{idMateriaPrima}")]
@@ -74,7 +74,7 @@ public class FormulaProduccionController : ControllerBase
         {
             return NotFound("Formula de produccion no encontrada.");
         }
-        return NoContent();
+        return Ok("Formula de produccion actualizada parcialmente correctamente");
     }
 
     [HttpDelete("{idProducto}/{idMateriaPrima}")]
@@ -85,6 +85,6 @@ public class FormulaProduccionController : ControllerBase
         {
             return NotFound("Formula de produccion no encontrada.");
         }
-        return NoContent();
+        return Ok("Formula de produccion eliminada correctamente");
     }
 }

@@ -16,14 +16,14 @@ public class InspeccionesCalidadController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<InspeccionesCalidadResponseDto>>> GetAll()
+    public async Task<IActionResult> GetAll()
     {
         var result = await _service.GetAll();
         return Ok(result);
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<InspeccionesCalidadResponseDto>> GetById(int id)
+    public async Task<IActionResult> GetById(int id)
     {
         var result = await _service.GetById(id);
         if (result == null)
@@ -34,10 +34,10 @@ public class InspeccionesCalidadController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<InspeccionesCalidadResponseDto>> Create([FromBody] InspeccionesCalidadCreateUpdateDto dto)
+    public async Task<IActionResult> Create([FromBody] InspeccionesCalidadCreateUpdateDto dto)
     {
-        var creado = await _service.Create(dto);
-        return CreatedAtAction(nameof(GetById), new { id = creado.IdInspeccion }, creado);
+        await _service.Create(dto);
+        return Ok("Inspeccion de calidad creada con exito");
     }
 
     [HttpPut("{id}")]
@@ -48,7 +48,7 @@ public class InspeccionesCalidadController : ControllerBase
         {
             return NotFound("Inspección de calidad no encontrada.");
         }
-        return NoContent();
+        return Ok("Inspeccion de calidad actualizada correctamente");
     }
 
     [HttpDelete("{id}")]
@@ -59,6 +59,6 @@ public class InspeccionesCalidadController : ControllerBase
         {
             return NotFound("Inspección de calidad no encontrada.");
         }
-        return NoContent();
+        return Ok("Inspeccion de calidad eliminada correctamente");
     }
 }

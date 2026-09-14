@@ -16,14 +16,14 @@ public class MateriasPrimaController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<MateriasPrimaResponseDto>>> GetAll()
+    public async Task<IActionResult> GetAll()
     {
         var result = await _service.GetAll();
         return Ok(result);
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<MateriasPrimaResponseDto>> GetById(int id)
+    public async Task<IActionResult> GetById(int id)
     {
         var result = await _service.GetById(id);
         if (result == null)
@@ -34,10 +34,10 @@ public class MateriasPrimaController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<MateriasPrimaResponseDto>> Create([FromBody] MateriasPrimaCreateUpdateDto dto)
+    public async Task<IActionResult> Create([FromBody] MateriasPrimaCreateUpdateDto dto)
     {
-        var creado = await _service.Create(dto);
-        return CreatedAtAction(nameof(GetById), new { id = creado.IdMateriaPrima }, creado);
+        await _service.Create(dto);
+        return Ok("Materia prima creada con exito");
     }
 
     [HttpPut("{id}")]
@@ -48,7 +48,7 @@ public class MateriasPrimaController : ControllerBase
         {
             return NotFound("Materia prima no encontrada.");
         }
-        return NoContent();
+        return Ok("Materia prima actualizada correctamente");
     }
 
     [HttpDelete("{id}")]
@@ -59,6 +59,6 @@ public class MateriasPrimaController : ControllerBase
         {
             return NotFound("Materia prima no encontrada.");
         }
-        return NoContent();
+        return Ok("Materia prima eliminada correctamente");
     }
 }

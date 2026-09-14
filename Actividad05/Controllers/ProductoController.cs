@@ -16,28 +16,28 @@ public class ProductoController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ProductoResponseDto>>> GetAll()
+    public async Task<IActionResult> GetAll()
     {
-        var productos = await _service.GetAll();
-        return Ok(productos);
+        var result = await _service.GetAll();
+        return Ok(result);
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<ProductoResponseDto>> GetById(int id)
+    public async Task<IActionResult> GetById(int id)
     {
-        var producto = await _service.GetById(id);
-        if (producto == null)
+        var result = await _service.GetById(id);
+        if (result == null)
         {
             return NotFound("Producto no encontrado.");
         }
-        return Ok(producto);
+        return Ok(result);
     }
 
     [HttpPost]
-    public async Task<ActionResult<ProductoResponseDto>> Create([FromBody] ProductoCreateUpdateDto dto)
+    public async Task<IActionResult> Create([FromBody] ProductoCreateUpdateDto dto)
     {
-        var creado = await _service.Create(dto);
-        return CreatedAtAction(nameof(GetById), new { id = creado.IdProducto }, creado);
+        await _service.Create(dto);
+        return Ok("Producto creado con exito");
     }
 
     [HttpPut("{id}")]
@@ -48,7 +48,7 @@ public class ProductoController : ControllerBase
         {
             return NotFound("Producto no encontrado.");
         }
-        return NoContent();
+        return Ok("Producto actualizado correctamente");
     }
 
     [HttpDelete("{id}")]
@@ -59,6 +59,6 @@ public class ProductoController : ControllerBase
         {
             return NotFound("Producto no encontrado.");
         }
-        return NoContent();
+        return Ok("Producto eliminado correctamente");
     }
 }

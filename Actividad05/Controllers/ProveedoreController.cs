@@ -16,28 +16,28 @@ public class ProveedoreController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ProveedoreResponseDto>>> GetAll()
+    public async Task<IActionResult> GetAll()
     {
-        var proveedores = await _service.GetAll();
-        return Ok(proveedores);
+        var result = await _service.GetAll();
+        return Ok(result);
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<ProveedoreResponseDto>> GetById(int id)
+    public async Task<IActionResult> GetById(int id)
     {
-        var proveedor = await _service.GetById(id);
-        if (proveedor == null)
+        var result = await _service.GetById(id);
+        if (result == null)
         {
             return NotFound("Proveedor no encontrado.");
         }
-        return Ok(proveedor);
+        return Ok(result);
     }
 
     [HttpPost]
-    public async Task<ActionResult<ProveedoreResponseDto>> Create([FromBody] ProveedoreCreateUpdateDto dto)
+    public async Task<IActionResult> Create([FromBody] ProveedoreCreateUpdateDto dto)
     {
-        var creado = await _service.Create(dto);
-        return CreatedAtAction(nameof(GetById), new { id = creado.IdProveedor }, creado);
+        await _service.Create(dto);
+        return Ok("Proveedor creado con exito");
     }
 
     [HttpPut("{id}")]
@@ -48,7 +48,7 @@ public class ProveedoreController : ControllerBase
         {
             return NotFound("Proveedor no encontrado.");
         }
-        return NoContent();
+        return Ok("Proveedor actualizado correctamente");
     }
 
     [HttpDelete("{id}")]
@@ -59,6 +59,6 @@ public class ProveedoreController : ControllerBase
         {
             return NotFound("Proveedor no encontrado.");
         }
-        return NoContent();
+        return Ok("Proveedor eliminado correctamente");
     }
 }

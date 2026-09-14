@@ -16,14 +16,14 @@ public class OrdenesProduccionController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<OrdenesProduccionResponseDto>>> GetAll()
+    public async Task<IActionResult> GetAll()
     {
         var result = await _service.GetAll();
         return Ok(result);
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<OrdenesProduccionResponseDto>> GetById(int id)
+    public async Task<IActionResult> GetById(int id)
     {
         var result = await _service.GetById(id);
         if (result == null)
@@ -34,10 +34,10 @@ public class OrdenesProduccionController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<OrdenesProduccionResponseDto>> Create([FromBody] OrdenesProduccionCreateUpdateDto dto)
+    public async Task<IActionResult> Create([FromBody] OrdenesProduccionCreateUpdateDto dto)
     {
-        var creado = await _service.Create(dto);
-        return CreatedAtAction(nameof(GetById), new { id = creado.IdOrden }, creado);
+        await _service.Create(dto);
+        return Ok("Orden de produccion creada con exito");
     }
 
     [HttpPut("{id}")]
@@ -48,7 +48,7 @@ public class OrdenesProduccionController : ControllerBase
         {
             return NotFound("Orden de produccion no encontrada.");
         }
-        return NoContent();
+        return Ok("Orden de produccion actualizada correctamente");
     }
 
     [HttpDelete("{id}")]
@@ -59,6 +59,6 @@ public class OrdenesProduccionController : ControllerBase
         {
             return NotFound("Orden de produccion no encontrada.");
         }
-        return NoContent();
+        return Ok("Orden de produccion eliminada correctamente");
     }
 }

@@ -16,14 +16,14 @@ public class MovimientosInventarioController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<MovimientosInventarioResponseDto>>> GetAll()
+    public async Task<IActionResult> GetAll()
     {
         var result = await _service.GetAll();
         return Ok(result);
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<MovimientosInventarioResponseDto>> GetById(int id)
+    public async Task<IActionResult> GetById(int id)
     {
         var result = await _service.GetById(id);
         if (result == null)
@@ -34,10 +34,10 @@ public class MovimientosInventarioController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<MovimientosInventarioResponseDto>> Create([FromBody] MovimientosInventarioCreateUpdateDto dto)
+    public async Task<IActionResult> Create([FromBody] MovimientosInventarioCreateUpdateDto dto)
     {
-        var creado = await _service.Create(dto);
-        return CreatedAtAction(nameof(GetById), new { id = creado.IdMovimiento }, creado);
+        await _service.Create(dto);
+        return Ok("Movimiento de inventario creado con exito");
     }
 
     [HttpPut("{id}")]
@@ -48,7 +48,7 @@ public class MovimientosInventarioController : ControllerBase
         {
             return NotFound("Movimiento de inventario no encontrado.");
         }
-        return NoContent();
+        return Ok("Movimiento de inventario actualizado correctamente");
     }
 
     [HttpDelete("{id}")]
@@ -59,6 +59,6 @@ public class MovimientosInventarioController : ControllerBase
         {
             return NotFound("Movimiento de inventario no encontrado.");
         }
-        return NoContent();
+        return Ok("Movimiento de inventario eliminado correctamente");
     }
 }

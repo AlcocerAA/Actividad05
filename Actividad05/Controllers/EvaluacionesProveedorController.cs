@@ -16,14 +16,14 @@ public class EvaluacionesProveedorController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<EvaluacionesProveedorResponseDto>>> GetAll()
+    public async Task<IActionResult> GetAll()
     {
         var result = await _service.GetAll();
         return Ok(result);
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<EvaluacionesProveedorResponseDto>> GetById(int id)
+    public async Task<IActionResult> GetById(int id)
     {
         var result = await _service.GetById(id);
         if (result == null)
@@ -34,10 +34,10 @@ public class EvaluacionesProveedorController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<EvaluacionesProveedorResponseDto>> Create([FromBody] EvaluacionesProveedorCreateUpdateDto dto)
+    public async Task<IActionResult> Create([FromBody] EvaluacionesProveedorCreateUpdateDto dto)
     {
-        var creado = await _service.Create(dto);
-        return CreatedAtAction(nameof(GetById), new { id = creado.IdEvaluacion }, creado);
+        await _service.Create(dto);
+        return Ok("Evaluacion de proveedor creada con exito");
     }
 
     [HttpPut("{id}")]
@@ -48,7 +48,7 @@ public class EvaluacionesProveedorController : ControllerBase
         {
             return NotFound("Evaluación de proveedor no encontrada.");
         }
-        return NoContent();
+        return Ok("Evaluacion de proveedor actualizada correctamente");
     }
 
     [HttpDelete("{id}")]
@@ -59,6 +59,6 @@ public class EvaluacionesProveedorController : ControllerBase
         {
             return NotFound("Evaluación de proveedor no encontrada.");
         }
-        return NoContent();
+        return Ok("Evaluacion de proveedor eliminada correctamente");
     }
 }
