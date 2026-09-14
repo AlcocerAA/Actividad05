@@ -1,4 +1,4 @@
-﻿namespace Lab04_AlexanderVasquez.Repositories;
+﻿namespace Actividad05.Repositories;
 
 public interface IGenericRepository<T> where T : class
 {
