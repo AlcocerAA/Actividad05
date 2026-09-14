@@ -1,12 +1,12 @@
-using Actividad05.Models;
+using Actividad05.DTOs;
 
 namespace Actividad05.Services;
 
 public interface IMovimientosInventarioService
 {
-    Task<IEnumerable<MovimientosInventario>> GetAll();
-    Task<MovimientosInventario?> GetById(int id);
-    Task<MovimientosInventario> Create(MovimientosInventario entity);
-    Task<bool> Update(int id, MovimientosInventario entity);
+    Task<IEnumerable<MovimientosInventarioResponseDto>> GetAll();
+    Task<MovimientosInventarioResponseDto?> GetById(int id);
+    Task<MovimientosInventarioResponseDto> Create(MovimientosInventarioCreateUpdateDto dto);
+    Task<bool> Update(int id, MovimientosInventarioCreateUpdateDto dto);
     Task<bool> Delete(int id);
 }

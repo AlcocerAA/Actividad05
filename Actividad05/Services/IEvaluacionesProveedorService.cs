@@ -1,12 +1,12 @@
-using Actividad05.Models;
+using Actividad05.DTOs;
 
 namespace Actividad05.Services;
 
 public interface IEvaluacionesProveedorService
 {
-    Task<IEnumerable<EvaluacionesProveedor>> GetAll();
-    Task<EvaluacionesProveedor?> GetById(int id);
-    Task<EvaluacionesProveedor> Create(EvaluacionesProveedor entity);
-    Task<bool> Update(int id, EvaluacionesProveedor entity);
+    Task<IEnumerable<EvaluacionesProveedorResponseDto>> GetAll();
+    Task<EvaluacionesProveedorResponseDto?> GetById(int id);
+    Task<EvaluacionesProveedorResponseDto> Create(EvaluacionesProveedorCreateUpdateDto dto);
+    Task<bool> Update(int id, EvaluacionesProveedorCreateUpdateDto dto);
     Task<bool> Delete(int id);
 }

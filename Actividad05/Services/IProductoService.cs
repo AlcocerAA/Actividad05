@@ -1,12 +1,12 @@
-using Actividad05.Models;
+using Actividad05.DTOs;
 
 namespace Actividad05.Services;
 
 public interface IProductoService
 {
-    Task<IEnumerable<Producto>> GetAll();
-    Task<Producto?> GetById(int id);
-    Task<Producto> Create(Producto entity);
-    Task<bool> Update(int id, Producto entity);
+    Task<IEnumerable<ProductoResponseDto>> GetAll();
+    Task<ProductoResponseDto?> GetById(int id);
+    Task<ProductoResponseDto> Create(ProductoCreateUpdateDto dto);
+    Task<bool> Update(int id, ProductoCreateUpdateDto dto);
     Task<bool> Delete(int id);
 }

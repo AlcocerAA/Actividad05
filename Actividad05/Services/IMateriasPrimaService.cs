@@ -1,12 +1,12 @@
-using Actividad05.Models;
+using Actividad05.DTOs;
 
 namespace Actividad05.Services;
 
 public interface IMateriasPrimaService
 {
-    Task<IEnumerable<MateriasPrima>> GetAll();
-    Task<MateriasPrima?> GetById(int id);
-    Task<MateriasPrima> Create(MateriasPrima entity);
-    Task<bool> Update(int id, MateriasPrima entity);
+    Task<IEnumerable<MateriasPrimaResponseDto>> GetAll();
+    Task<MateriasPrimaResponseDto?> GetById(int id);
+    Task<MateriasPrimaResponseDto> Create(MateriasPrimaCreateUpdateDto dto);
+    Task<bool> Update(int id, MateriasPrimaCreateUpdateDto dto);
     Task<bool> Delete(int id);
 }

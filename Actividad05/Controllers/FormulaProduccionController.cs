@@ -1,9 +1,6 @@
-﻿using Actividad05.DTOs;
-using Actividad05.Models;
+using Actividad05.DTOs;
 using Actividad05.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Npgsql;
 
 namespace Actividad05.Controllers;
 
@@ -19,98 +16,75 @@ public class FormulaProduccionController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> ObtenerFormulas()
+    public async Task<ActionResult<IEnumerable<FormulaProduccionResponseDto>>> ObtenerFormulas()
     {
         var formulas = await _service.GetAllFormulas();
         return Ok(formulas);
     }
 
+    [HttpGet("{idProducto}/{idMateriaPrima}")]
+    public async Task<ActionResult<FormulaProduccionResponseDto>> ObtenerFormulaPorId(int idProducto, int idMateriaPrima)
+    {
+        var formula = await _service.GetFormulaById(idProducto, idMateriaPrima);
+        if (formula == null)
+        {
+            return NotFound("Formula de produccion no encontrada.");
+        }
+        return Ok(formula);
+    }
+
     [HttpPost]
-    public async Task<IActionResult> CrearFormula([FromBody] FormulaProduccionDto dto)
+    public async Task<ActionResult<FormulaProduccionResponseDto>> CrearFormula([FromBody] FormulaProduccionCreateDto dto)
     {
         try
         {
-            var formula = new FormulaProduccion
-            {
-                IdProducto = dto.IdProducto ?? 0,
-                IdMateriaPrima = dto.IdMateriaPrima ?? 0,
-                CantidadRequerida = dto.CantidadRequerida ?? 0
-            };
-
-            await _service.CreateFormula(formula);
-            return Ok("Formula de produccion creada con exito");
+            var creada = await _service.CreateFormula(dto);
+            return CreatedAtAction(nameof(ObtenerFormulaPorId), new { idProducto = creada.IdProducto, idMateriaPrima = creada.IdMateriaPrima }, creada);
         }
-        catch (DbUpdateException ex)
+        catch (ArgumentException ex)
         {
-            if (ex.InnerException is PostgresException pgEx)
-            {
-                if (pgEx.SqlState == "23503")
-                {
-                    return BadRequest("El IdProducto o el IdMateriaPrima especificado no existe en la base de datos.");
-                }
-                if (pgEx.SqlState == "23505")
-                {
-                    return BadRequest("Ya existe una formula registrada para ese IdProducto e IdMateriaPrima.");
-                }
-            }
-            return BadRequest("Error al procesar la formula de produccion en la base de datos.");
+            return BadRequest(ex.Message);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
         }
     }
 
     [HttpPut("{idProducto}/{idMateriaPrima}")]
-    public async Task<IActionResult> ActualizarFormula(int idProducto, int idMateriaPrima, [FromBody] FormulaProduccionDto dto)
+    public async Task<IActionResult> ActualizarFormula(int idProducto, int idMateriaPrima, [FromBody] FormulaProduccionUpdateDto dto)
     {
-        var formula = new FormulaProduccion
+        var actualizado = await _service.UpdateFormula(idProducto, idMateriaPrima, dto);
+        if (!actualizado)
         {
-            IdProducto = idProducto,
-            IdMateriaPrima = idMateriaPrima,
-            CantidadRequerida = dto.CantidadRequerida ?? 0
-        };
-
-        var resultado = await _service.UpdateFormula(idProducto, idMateriaPrima, formula);
-        if (!resultado)
-        {
-            return NotFound("Formula de produccion no encontrada");
+            return NotFound("Formula de produccion no encontrada.");
         }
-
-        return Ok("Formula de produccion actualizada correctamente");
+        return NoContent();
     }
 
     [HttpPatch("{idProducto}/{idMateriaPrima}")]
-    public async Task<IActionResult> ActualizarParcialFormula(int idProducto, int idMateriaPrima, [FromBody] FormulaProduccionDto dto)
+    public async Task<IActionResult> ActualizarParcialFormula(int idProducto, int idMateriaPrima, [FromBody] FormulaProduccionUpdateDto dto)
     {
-        var formula = new FormulaProduccion
+        var actualizado = await _service.PatchFormula(idProducto, idMateriaPrima, dto);
+        if (!actualizado)
         {
-            IdProducto = idProducto,
-            IdMateriaPrima = idMateriaPrima,
-            CantidadRequerida = dto.CantidadRequerida ?? 0
-        };
-
-        var resultado = await _service.PatchFormula(idProducto, idMateriaPrima, formula);
-        if (!resultado)
-        {
-            return NotFound("Formula de produccion no encontrada");
+            return NotFound("Formula de produccion no encontrada.");
         }
-
-        return Ok("Formula de produccion actualizada parcialmente correctamente");
+        return NoContent();
     }
 
     [HttpDelete("{idProducto}/{idMateriaPrima}")]
     public async Task<IActionResult> EliminarFormula(int idProducto, int idMateriaPrima)
     {
-        try
+        var eliminado = await _service.DeleteFormula(idProducto, idMateriaPrima);
+        if (!eliminado)
         {
-            var resultado = await _service.DeleteFormula(idProducto, idMateriaPrima);
-            if (!resultado)
-            {
-                return NotFound("Formula de produccion no encontrada");
-            }
-
-            return Ok("Formula de produccion eliminada correctamente");
+            return NotFound("Formula de produccion no encontrada.");
         }
-        catch (DbUpdateException)
-        {
-            return BadRequest("No se puede eliminar la formula de produccion debido a dependencias en la base de datos.");
-        }
+        return NoContent();
     }
 }

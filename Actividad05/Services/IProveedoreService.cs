@@ -1,12 +1,12 @@
-using Actividad05.Models;
+using Actividad05.DTOs;
 
 namespace Actividad05.Services;
 
 public interface IProveedoreService
 {
-    Task<IEnumerable<Proveedore>> GetAll();
-    Task<Proveedore?> GetById(int id);
-    Task<Proveedore> Create(Proveedore entity);
-    Task<bool> Update(int id, Proveedore entity);
+    Task<IEnumerable<ProveedoreResponseDto>> GetAll();
+    Task<ProveedoreResponseDto?> GetById(int id);
+    Task<ProveedoreResponseDto> Create(ProveedoreCreateUpdateDto dto);
+    Task<bool> Update(int id, ProveedoreCreateUpdateDto dto);
     Task<bool> Delete(int id);
 }

@@ -1,12 +1,12 @@
-using Actividad05.Models;
+using Actividad05.DTOs;
 
 namespace Actividad05.Services;
 
 public interface IOrdenesProduccionService
 {
-    Task<IEnumerable<OrdenesProduccion>> GetAll();
-    Task<OrdenesProduccion?> GetById(int id);
-    Task<OrdenesProduccion> Create(OrdenesProduccion entity);
-    Task<bool> Update(int id, OrdenesProduccion entity);
+    Task<IEnumerable<OrdenesProduccionResponseDto>> GetAll();
+    Task<OrdenesProduccionResponseDto?> GetById(int id);
+    Task<OrdenesProduccionResponseDto> Create(OrdenesProduccionCreateUpdateDto dto);
+    Task<bool> Update(int id, OrdenesProduccionCreateUpdateDto dto);
     Task<bool> Delete(int id);
 }

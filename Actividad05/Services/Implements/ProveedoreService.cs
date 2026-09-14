@@ -1,3 +1,4 @@
+using Actividad05.DTOs;
 using Actividad05.Models;
 using Actividad05.Repositories;
 
@@ -12,34 +13,47 @@ public class ProveedoreService : IProveedoreService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<IEnumerable<Proveedore>> GetAll()
+    public async Task<IEnumerable<ProveedoreResponseDto>> GetAll()
     {
-        return await _unitOfWork.Proveedores.GetAll();
+        var proveedores = await _unitOfWork.Proveedores.GetAll();
+        return proveedores.Select(MapToResponseDto);
     }
 
-    public async Task<Proveedore?> GetById(int id)
+    public async Task<ProveedoreResponseDto?> GetById(int id)
     {
-        return await _unitOfWork.Proveedores.GetById(id);
+        var p = await _unitOfWork.Proveedores.GetById(id);
+        return p == null ? null : MapToResponseDto(p);
     }
 
-    public async Task<Proveedore> Create(Proveedore entity)
+    public async Task<ProveedoreResponseDto> Create(ProveedoreCreateUpdateDto dto)
     {
+        var entity = new Proveedore
+        {
+            Nombre = dto.Nombre,
+            Contacto = dto.Contacto,
+            Telefono = dto.Telefono,
+            Email = dto.Email,
+            CalificacionPromedio = dto.CalificacionPromedio,
+            Activo = dto.Activo
+        };
+
         await _unitOfWork.Proveedores.Add(entity);
         await _unitOfWork.SaveAsync();
-        return entity;
+
+        return MapToResponseDto(entity);
     }
 
-    public async Task<bool> Update(int id, Proveedore entity)
+    public async Task<bool> Update(int id, ProveedoreCreateUpdateDto dto)
     {
         var existente = await _unitOfWork.Proveedores.GetById(id);
         if (existente == null) return false;
 
-        existente.Nombre = entity.Nombre;
-        existente.Contacto = entity.Contacto;
-        existente.Telefono = entity.Telefono;
-        existente.Email = entity.Email;
-        existente.CalificacionPromedio = entity.CalificacionPromedio;
-        existente.Activo = entity.Activo;
+        existente.Nombre = dto.Nombre;
+        existente.Contacto = dto.Contacto;
+        existente.Telefono = dto.Telefono;
+        existente.Email = dto.Email;
+        existente.CalificacionPromedio = dto.CalificacionPromedio;
+        existente.Activo = dto.Activo;
 
         _unitOfWork.Proveedores.Update(existente);
         await _unitOfWork.SaveAsync();
@@ -55,4 +69,15 @@ public class ProveedoreService : IProveedoreService
         await _unitOfWork.SaveAsync();
         return true;
     }
+
+    private static ProveedoreResponseDto MapToResponseDto(Proveedore p) => new()
+    {
+        IdProveedor = p.IdProveedor,
+        Nombre = p.Nombre,
+        Contacto = p.Contacto,
+        Telefono = p.Telefono,
+        Email = p.Email,
+        CalificacionPromedio = p.CalificacionPromedio,
+        Activo = p.Activo
+    };
 }

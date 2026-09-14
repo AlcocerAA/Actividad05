@@ -1,3 +1,4 @@
+using Actividad05.DTOs;
 using Actividad05.Models;
 using Actividad05.Repositories;
 
@@ -12,33 +13,49 @@ public class InspeccionesCalidadService : IInspeccionesCalidadService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<IEnumerable<InspeccionesCalidad>> GetAll()
+    public async Task<IEnumerable<InspeccionesCalidadResponseDto>> GetAll()
     {
-        return await _unitOfWork.InspeccionesCalidad.GetAll();
+        var lista = await _unitOfWork.InspeccionesCalidad.GetAll();
+        return lista.Select(MapToResponseDto);
     }
 
-    public async Task<InspeccionesCalidad?> GetById(int id)
+    public async Task<InspeccionesCalidadResponseDto?> GetById(int id)
     {
-        return await _unitOfWork.InspeccionesCalidad.GetById(id);
+        var i = await _unitOfWork.InspeccionesCalidad.GetById(id);
+        return i == null ? null : MapToResponseDto(i);
     }
 
-    public async Task<InspeccionesCalidad> Create(InspeccionesCalidad entity)
+    public async Task<InspeccionesCalidadResponseDto> Create(InspeccionesCalidadCreateUpdateDto dto)
     {
+        var entity = new InspeccionesCalidad
+        {
+            IdOrden = dto.IdOrden,
+            Inspector = dto.Inspector,
+            Etapa = dto.Etapa,
+            FechaInspeccion = dto.FechaInspeccion,
+            CantidadInspeccionada = dto.CantidadInspeccionada,
+            CantidadDefectuosa = dto.CantidadDefectuosa,
+            Observaciones = dto.Observaciones
+        };
+
         await _unitOfWork.InspeccionesCalidad.Add(entity);
         await _unitOfWork.SaveAsync();
-        return entity;
+
+        return MapToResponseDto(entity);
     }
 
-    public async Task<bool> Update(int id, InspeccionesCalidad entity)
+    public async Task<bool> Update(int id, InspeccionesCalidadCreateUpdateDto dto)
     {
         var existente = await _unitOfWork.InspeccionesCalidad.GetById(id);
         if (existente == null) return false;
 
-        existente.Etapa = entity.Etapa;
-        existente.CantidadInspeccionada = entity.CantidadInspeccionada;
-        existente.CantidadDefectuosa = entity.CantidadDefectuosa;
-        existente.Inspector = entity.Inspector;
-        existente.Observaciones = entity.Observaciones;
+        existente.IdOrden = dto.IdOrden;
+        existente.Inspector = dto.Inspector;
+        existente.Etapa = dto.Etapa;
+        existente.FechaInspeccion = dto.FechaInspeccion;
+        existente.CantidadInspeccionada = dto.CantidadInspeccionada;
+        existente.CantidadDefectuosa = dto.CantidadDefectuosa;
+        existente.Observaciones = dto.Observaciones;
 
         _unitOfWork.InspeccionesCalidad.Update(existente);
         await _unitOfWork.SaveAsync();
@@ -54,4 +71,16 @@ public class InspeccionesCalidadService : IInspeccionesCalidadService
         await _unitOfWork.SaveAsync();
         return true;
     }
+
+    private static InspeccionesCalidadResponseDto MapToResponseDto(InspeccionesCalidad i) => new()
+    {
+        IdInspeccion = i.IdInspeccion,
+        IdOrden = i.IdOrden,
+        Inspector = i.Inspector,
+        Etapa = i.Etapa,
+        FechaInspeccion = i.FechaInspeccion,
+        CantidadInspeccionada = i.CantidadInspeccionada,
+        CantidadDefectuosa = i.CantidadDefectuosa,
+        Observaciones = i.Observaciones
+    };
 }

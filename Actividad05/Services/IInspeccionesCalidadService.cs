@@ -1,12 +1,12 @@
-using Actividad05.Models;
+using Actividad05.DTOs;
 
 namespace Actividad05.Services;
 
 public interface IInspeccionesCalidadService
 {
-    Task<IEnumerable<InspeccionesCalidad>> GetAll();
-    Task<InspeccionesCalidad?> GetById(int id);
-    Task<InspeccionesCalidad> Create(InspeccionesCalidad entity);
-    Task<bool> Update(int id, InspeccionesCalidad entity);
+    Task<IEnumerable<InspeccionesCalidadResponseDto>> GetAll();
+    Task<InspeccionesCalidadResponseDto?> GetById(int id);
+    Task<InspeccionesCalidadResponseDto> Create(InspeccionesCalidadCreateUpdateDto dto);
+    Task<bool> Update(int id, InspeccionesCalidadCreateUpdateDto dto);
     Task<bool> Delete(int id);
 }

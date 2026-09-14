@@ -1,3 +1,4 @@
+using Actividad05.DTOs;
 using Actividad05.Models;
 using Actividad05.Repositories;
 
@@ -12,35 +13,51 @@ public class OrdenesProduccionService : IOrdenesProduccionService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<IEnumerable<OrdenesProduccion>> GetAll()
+    public async Task<IEnumerable<OrdenesProduccionResponseDto>> GetAll()
     {
-        return await _unitOfWork.OrdenesProduccion.GetAll();
+        var lista = await _unitOfWork.OrdenesProduccion.GetAll();
+        return lista.Select(MapToResponseDto);
     }
 
-    public async Task<OrdenesProduccion?> GetById(int id)
+    public async Task<OrdenesProduccionResponseDto?> GetById(int id)
     {
-        return await _unitOfWork.OrdenesProduccion.GetById(id);
+        var o = await _unitOfWork.OrdenesProduccion.GetById(id);
+        return o == null ? null : MapToResponseDto(o);
     }
 
-    public async Task<OrdenesProduccion> Create(OrdenesProduccion entity)
+    public async Task<OrdenesProduccionResponseDto> Create(OrdenesProduccionCreateUpdateDto dto)
     {
+        var entity = new OrdenesProduccion
+        {
+            IdProducto = dto.IdProducto,
+            LineaProduccion = dto.LineaProduccion,
+            Responsable = dto.Responsable,
+            CantidadPlaneada = dto.CantidadPlaneada,
+            CantidadProducida = dto.CantidadProducida,
+            FechaPlanificada = dto.FechaPlanificada,
+            FechaInicio = dto.FechaInicio,
+            FechaEntrega = dto.FechaEntrega
+        };
+
         await _unitOfWork.OrdenesProduccion.Add(entity);
         await _unitOfWork.SaveAsync();
-        return entity;
+
+        return MapToResponseDto(entity);
     }
 
-    public async Task<bool> Update(int id, OrdenesProduccion entity)
+    public async Task<bool> Update(int id, OrdenesProduccionCreateUpdateDto dto)
     {
         var existente = await _unitOfWork.OrdenesProduccion.GetById(id);
         if (existente == null) return false;
 
-        existente.CantidadPlaneada = entity.CantidadPlaneada;
-        existente.CantidadProducida = entity.CantidadProducida;
-        existente.FechaPlanificada = entity.FechaPlanificada;
-        existente.FechaInicio = entity.FechaInicio;
-        existente.FechaEntrega = entity.FechaEntrega;
-        existente.LineaProduccion = entity.LineaProduccion;
-        existente.Responsable = entity.Responsable;
+        existente.IdProducto = dto.IdProducto;
+        existente.LineaProduccion = dto.LineaProduccion;
+        existente.Responsable = dto.Responsable;
+        existente.CantidadPlaneada = dto.CantidadPlaneada;
+        existente.CantidadProducida = dto.CantidadProducida;
+        existente.FechaPlanificada = dto.FechaPlanificada;
+        existente.FechaInicio = dto.FechaInicio;
+        existente.FechaEntrega = dto.FechaEntrega;
 
         _unitOfWork.OrdenesProduccion.Update(existente);
         await _unitOfWork.SaveAsync();
@@ -56,4 +73,17 @@ public class OrdenesProduccionService : IOrdenesProduccionService
         await _unitOfWork.SaveAsync();
         return true;
     }
+
+    private static OrdenesProduccionResponseDto MapToResponseDto(OrdenesProduccion o) => new()
+    {
+        IdOrden = o.IdOrden,
+        IdProducto = o.IdProducto,
+        LineaProduccion = o.LineaProduccion,
+        Responsable = o.Responsable,
+        CantidadPlaneada = o.CantidadPlaneada,
+        CantidadProducida = o.CantidadProducida,
+        FechaPlanificada = o.FechaPlanificada,
+        FechaInicio = o.FechaInicio,
+        FechaEntrega = o.FechaEntrega
+    };
 }
