@@ -1,17 +1,15 @@
-using Actividad05.Models;
-
 namespace Actividad05.Repositories;
 
 public interface IUnitOfWork : IDisposable
 {
-    IGenericRepository<EvaluacionesProveedor> EvaluacionesProveedorRepository { get; }
-    IGenericRepository<FormulaProduccion> FormulaProduccionRepository { get; }
-    IGenericRepository<InspeccionesCalidad> InspeccionesCalidadRepository { get; }
-    IGenericRepository<MateriasPrima> MateriasPrimaRepository { get; }
-    IGenericRepository<MovimientosInventario> MovimientosInventarioRepository { get; }
-    IGenericRepository<OrdenesProduccion> OrdenesProduccionRepository { get; }
-    IGenericRepository<Producto> ProductoRepository { get; }
-    IGenericRepository<Proveedore> ProveedoreRepository { get; }
+    IEvaluacionesProveedorRepository EvaluacionesProveedores { get; }
+    IFormulaProduccionRepository FormulasProduccion { get; }
+    IInspeccionesCalidadRepository InspeccionesCalidad { get; }
+    IMateriasPrimaRepository MateriasPrimas { get; }
+    IMovimientosInventarioRepository MovimientosInventario { get; }
+    IOrdenesProduccionRepository OrdenesProduccion { get; }
+    IProductoRepository Productos { get; }
+    IProveedoreRepository Proveedores { get; }
 
     int Save();
     Task<int> SaveAsync();

@@ -8,43 +8,43 @@ public class UnitOfWork : IUnitOfWork
     private readonly ApplicationDbContext _context;
     private bool _disposed = false;
 
-    private IGenericRepository<EvaluacionesProveedor>? _evaluacionesProveedorRepository;
-    private IGenericRepository<FormulaProduccion>? _formulaProduccionRepository;
-    private IGenericRepository<InspeccionesCalidad>? _inspeccionesCalidadRepository;
-    private IGenericRepository<MateriasPrima>? _materiasPrimaRepository;
-    private IGenericRepository<MovimientosInventario>? _movimientosInventarioRepository;
-    private IGenericRepository<OrdenesProduccion>? _ordenesProduccionRepository;
-    private IGenericRepository<Producto>? _productoRepository;
-    private IGenericRepository<Proveedore>? _proveedoreRepository;
+    private IEvaluacionesProveedorRepository? _evaluacionesProveedores;
+    private IFormulaProduccionRepository? _formulasProduccion;
+    private IInspeccionesCalidadRepository? _inspeccionesCalidad;
+    private IMateriasPrimaRepository? _materiasPrimas;
+    private IMovimientosInventarioRepository? _movimientosInventario;
+    private IOrdenesProduccionRepository? _ordenesProduccion;
+    private IProductoRepository? _productos;
+    private IProveedoreRepository? _proveedores;
 
     public UnitOfWork(ApplicationDbContext context)
     {
         _context = context;
     }
 
-    public IGenericRepository<EvaluacionesProveedor> EvaluacionesProveedorRepository =>
-        _evaluacionesProveedorRepository ??= new GenericRepository<EvaluacionesProveedor>(_context);
+    public IEvaluacionesProveedorRepository EvaluacionesProveedores =>
+        _evaluacionesProveedores ??= new EvaluacionesProveedorRepository(_context);
 
-    public IGenericRepository<FormulaProduccion> FormulaProduccionRepository =>
-        _formulaProduccionRepository ??= new GenericRepository<FormulaProduccion>(_context);
+    public IFormulaProduccionRepository FormulasProduccion =>
+        _formulasProduccion ??= new FormulaProduccionRepository(_context);
 
-    public IGenericRepository<InspeccionesCalidad> InspeccionesCalidadRepository =>
-        _inspeccionesCalidadRepository ??= new GenericRepository<InspeccionesCalidad>(_context);
+    public IInspeccionesCalidadRepository InspeccionesCalidad =>
+        _inspeccionesCalidad ??= new InspeccionesCalidadRepository(_context);
 
-    public IGenericRepository<MateriasPrima> MateriasPrimaRepository =>
-        _materiasPrimaRepository ??= new GenericRepository<MateriasPrima>(_context);
+    public IMateriasPrimaRepository MateriasPrimas =>
+        _materiasPrimas ??= new MateriasPrimaRepository(_context);
 
-    public IGenericRepository<MovimientosInventario> MovimientosInventarioRepository =>
-        _movimientosInventarioRepository ??= new GenericRepository<MovimientosInventario>(_context);
+    public IMovimientosInventarioRepository MovimientosInventario =>
+        _movimientosInventario ??= new MovimientosInventarioRepository(_context);
 
-    public IGenericRepository<OrdenesProduccion> OrdenesProduccionRepository =>
-        _ordenesProduccionRepository ??= new GenericRepository<OrdenesProduccion>(_context);
+    public IOrdenesProduccionRepository OrdenesProduccion =>
+        _ordenesProduccion ??= new OrdenesProduccionRepository(_context);
 
-    public IGenericRepository<Producto> ProductoRepository =>
-        _productoRepository ??= new GenericRepository<Producto>(_context);
+    public IProductoRepository Productos =>
+        _productos ??= new ProductoRepository(_context);
 
-    public IGenericRepository<Proveedore> ProveedoreRepository =>
-        _proveedoreRepository ??= new GenericRepository<Proveedore>(_context);
+    public IProveedoreRepository Proveedores =>
+        _proveedores ??= new ProveedoreRepository(_context);
 
     public int Save()
     {

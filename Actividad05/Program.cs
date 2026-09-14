@@ -16,9 +16,28 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+// Repositorios específicos
+builder.Services.AddScoped<IEvaluacionesProveedorRepository, EvaluacionesProveedorRepository>();
+builder.Services.AddScoped<IFormulaProduccionRepository, FormulaProduccionRepository>();
+builder.Services.AddScoped<IInspeccionesCalidadRepository, InspeccionesCalidadRepository>();
+builder.Services.AddScoped<IMateriasPrimaRepository, MateriasPrimaRepository>();
+builder.Services.AddScoped<IMovimientosInventarioRepository, MovimientosInventarioRepository>();
+builder.Services.AddScoped<IOrdenesProduccionRepository, OrdenesProduccionRepository>();
+builder.Services.AddScoped<IProductoRepository, ProductoRepository>();
+builder.Services.AddScoped<IProveedoreRepository, ProveedoreRepository>();
+
+// Unit of Work
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+// Servicios específicos
+builder.Services.AddScoped<IEvaluacionesProveedorService, EvaluacionesProveedorService>();
 builder.Services.AddScoped<IFormulaProduccionService, FormulaProduccionService>();
+builder.Services.AddScoped<IInspeccionesCalidadService, InspeccionesCalidadService>();
+builder.Services.AddScoped<IMateriasPrimaService, MateriasPrimaService>();
+builder.Services.AddScoped<IMovimientosInventarioService, MovimientosInventarioService>();
+builder.Services.AddScoped<IOrdenesProduccionService, OrdenesProduccionService>();
+builder.Services.AddScoped<IProductoService, ProductoService>();
+builder.Services.AddScoped<IProveedoreService, ProveedoreService>();
 
 var app = builder.Build();
 
